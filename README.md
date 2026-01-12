@@ -1,6 +1,6 @@
 # MoMo SMS Data Processing System
 
-The MoMo Transaction Analyzer is a full stack data processing and analytics system designed to process Mobile Money (MoMo) SMS data in XML format, with data cleaning, categorization, database storage, and analytics dashboard
+The MoMo Transaction Analyzer is a full stack data processing and analytics system designed to process Mobile Money (MoMo) SMS data in XML format, with data cleaning, categorization, database storage, and analytics dashboard.
 
 # Team Members:
 
