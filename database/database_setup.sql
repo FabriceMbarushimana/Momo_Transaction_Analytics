@@ -7,7 +7,7 @@ USE momo_sms_db;
 -- Users Table
 CREATE TABLE Users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
-    phone_number VARCHAR(15) NOT NULL UNIQUE COMMENT 'User phone number',
+    phone_number VARCHAR(25) NOT NULL UNIQUE COMMENT 'User phone number',
     full_name VARCHAR(100) COMMENT 'Full name',
     email VARCHAR(100) COMMENT 'Email address',
     registration_date DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Registration date',
@@ -38,7 +38,7 @@ CREATE TABLE Transactions (
     receiver_id INT NOT NULL COMMENT 'Receiver user ID',
     category_id INT NOT NULL COMMENT 'Transaction category',
     amount DECIMAL(15, 2) NOT NULL COMMENT 'Transaction amount',
-    currency VARCHAR(3) DEFAULT 'SZL' COMMENT 'Currency code',
+    currency VARCHAR(3) DEFAULT 'RWF' COMMENT 'Currency code',
     status ENUM('pending', 'completed', 'failed', 'reversed') DEFAULT 'pending' COMMENT 'Transaction status',
     transaction_date DATETIME NOT NULL COMMENT 'Transaction date',
     description TEXT COMMENT 'Transaction description',
@@ -105,12 +105,19 @@ INSERT INTO Transaction_Categories (category_name, description) VALUES
 
 -- Insert Users
 INSERT INTO Users (phone_number, full_name, email, account_status) VALUES
-('0791234567', 'John Doe', 'john.doe@example.com', 'active'),
-('0797654321', 'Jane Smith', 'jane.smith@example.com', 'active'),
-('0798888888', 'Alice Johnson', 'alice.j@example.com', 'active'),
-('0795555555', 'Bob Williams', 'bob.w@example.com', 'active'),
-('0796666666', 'Charlie Brown', 'charlie.b@example.com', 'active'),
-('0793333333', 'Diana Prince', 'diana.p@example.com', 'active'),
+('36521838', 'Abebe Chala Chebudie', NULL, 'active'),
+('250791666666', 'Jane Smith', NULL, 'active'),
+('250789888888', 'Jane Smith', NULL, 'active'),
+('250791666666-SC', 'Samuel Carter', NULL, 'active'),
+('250789888888-SC', 'Samuel Carter', NULL, 'active'),
+('250791666666-AD', 'Alex Doe', NULL, 'active'),
+('250788999999', 'Alex Doe', NULL, 'active'),
+('RB-61316', 'Robert Brown', NULL, 'active'),
+('RB-28481', 'Robert Brown', NULL, 'active'),
+('LG-691', 'Linda Green', NULL, 'active'),
+('AGENT-250790777777', 'Agent Sophia', NULL, 'active'),
+('SERVICE-MTNPOWER', 'MTN Cash Power', NULL, 'active'),
+('SERVICE-AIRTIME', 'Airtime', NULL, 'active'),
 ('BANK', 'Bank System', 'support@bank.com', 'active');
 
 -- Insert Transactions
@@ -143,31 +150,16 @@ INSERT INTO User_Logs (user_id, log_id, user_action) VALUES
 (4, 7, 'Backup included');
 
 -- CRUD Operations
-
--- CREATE
 INSERT INTO Transactions (reference, sender_id, receiver_id, category_id, amount, status, transaction_date, description)
 VALUES ('TXN000008', 2, 3, 1, 1200.00, 'pending', NOW(), 'Test transaction');
 
--- READ
-SELECT t.transaction_id, t.reference, u1.full_name AS sender, u2.full_name AS receiver, 
-       tc.category_name, t.amount, t.status
-FROM Transactions t
-JOIN Users u1 ON t.sender_id = u1.user_id
-JOIN Users u2 ON t.receiver_id = u2.user_id
-JOIN Transaction_Categories tc ON t.category_id = tc.category_id
-WHERE t.reference = 'TXN000008';
-
--- UPDATE
 UPDATE Transactions 
 SET status = 'completed', description = 'Updated test'
 WHERE reference = 'TXN000008';
 
--- DELETE
 DELETE FROM Transactions WHERE reference = 'TXN000008';
 
 -- Sample Queries
-
--- Query 1: User transactions
 SELECT t.reference, u_sender.full_name AS sender, u_receiver.full_name AS receiver,
        tc.category_name, t.amount, t.status, t.transaction_date
 FROM Transactions t
@@ -177,14 +169,12 @@ JOIN Transaction_Categories tc ON t.category_id = tc.category_id
 WHERE u_sender.phone_number = '0791234567'
 ORDER BY t.transaction_date DESC;
 
--- Query 2: Category totals
 SELECT tc.category_name, COUNT(*) AS count, SUM(t.amount) AS total, AVG(t.amount) AS average
 FROM Transactions t
 JOIN Transaction_Categories tc ON t.category_id = tc.category_id
 GROUP BY tc.category_name
 ORDER BY total DESC;
 
--- Query 3: System errors with users
 SELECT sl.log_level, sl.log_message, sl.created_at,
        GROUP_CONCAT(u.full_name SEPARATOR ', ') AS affected_users
 FROM System_Logs sl
@@ -195,11 +185,8 @@ GROUP BY sl.log_id
 ORDER BY sl.created_at DESC;
 
 -- Security Rules
-
--- Enable trigger creation with binary logging
 SET GLOBAL log_bin_trust_function_creators = 1;
 
--- Trigger: Log inserts
 DELIMITER $$
 CREATE TRIGGER trg_log_insert
 AFTER INSERT ON Transactions
@@ -210,7 +197,6 @@ BEGIN
 END$$
 DELIMITER ;
 
--- Trigger: Prevent deletion of completed transactions
 DELIMITER $$
 CREATE TRIGGER trg_prevent_delete
 BEFORE DELETE ON Transactions
