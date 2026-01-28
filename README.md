@@ -28,9 +28,6 @@ Located in: /database/database_setup.sql
 ### JSON Examples
 Located in: /examples/json_schemas.json
 
-### Scrum Board
-https://trello.com/b/1Z25znf7
-
 ### Team Contributions
 Each member contributed directly through commits to their assigned files.
 
