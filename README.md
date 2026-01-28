@@ -34,6 +34,10 @@ https://trello.com/b/1Z25znf7
 ### Team Contributions
 Each member contributed directly through commits to their assigned files.
 
+## Team Contribution Sheet
+[🔗Team Contribution & Task Tracker ](https://docs.google.com/spreadsheets/d/1_bX3Z02lSbCKeD7T28rYMthSVcxyGterS3lE3Dz68c0/edit?usp=sharing)
+
+
 ## MoMo Transaction Analytics – Scrum Board
 This Trello board is used to manage the development of the MoMo Transaction Analytics project using the Scrum methodology.
 
